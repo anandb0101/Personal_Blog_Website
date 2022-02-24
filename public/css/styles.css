@@ -28,10 +28,10 @@
 	background-color: #1abc9c;
 }
 
-.footer p {
-	margin-top: 25px;
+.footer h6 {
+	margin-top: 12px;
 	font-size: 12px;
-  color: #fff;
+    color: #fff;
 }
 
 .compose {

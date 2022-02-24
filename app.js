@@ -52,7 +52,14 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
 app.get("/", function(req, res) {
+  res.render("about", {
+    logStatus:`${req.user? 'in':'out'}`
+  });
+});
+
+app.get("/home", function(req, res) {
   if(req.isAuthenticated()) {
     User.findById(req.user._id,function(err, foundUser){
       if(err) {
@@ -60,7 +67,8 @@ app.get("/", function(req, res) {
       } else {
         if(foundUser) {
           res.render("home", {
-            posts : foundUser.posts
+            posts : foundUser.posts,
+            logStatus:`${req.user? 'in':'out'}`
           });
         } else {
           console.log("user not found");
@@ -74,23 +82,42 @@ app.get("/", function(req, res) {
 });
 
 app.get("/about", function(req, res) {
-  res.render("about");
+  res.render("about",{
+    logStatus:`${req.user? 'in':'out'}`
+  });
 });
 
 app.get("/contact", function(req, res) {
-  res.render("contact");
+  res.render("contact",{
+    logStatus:`${req.user? 'in':'out'}`
+  });
 });
 
 app.get("/login", function(req,res) {
-  res.render("login");
+  res.render("login",{
+    logStatus:`${req.user? 'in':'out'}`
+  });
 });
 
 app.get("/register", function(req, res) {
-  res.render("register");
+  res.render("register",{
+    logStatus:`${req.user? 'in':'out'}`
+  });
 });
 
 app.get("/compose", function(req,res) {
-  res.render("compose");
+  if(req.isAuthenticated()) {
+    res.render("compose",{
+      logStatus:`${req.user? 'in':'out'}`
+    });
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.get("/logout", function(req, res) {
+  req.logout();
+  res.redirect("/login");
 });
 
 app.post("/register", function(req, res) {
@@ -100,7 +127,7 @@ app.post("/register", function(req, res) {
           res.redirect("/register");
       } else {
           passport.authenticate("local")(req, res, function(){
-              res.redirect("/");
+              res.redirect("/home");
           });
       }
   });
@@ -116,7 +143,7 @@ app.post("/login", function(req, res){
           console.log(err);
       } else {
           passport.authenticate("local")(req, res, function(){
-              res.redirect("/");
+            res.redirect("/home");
           });
       }
   });
@@ -139,7 +166,7 @@ app.post("/compose", function(req,res){
           if(err) {
             console.log(err);
           } else {
-            res.redirect("/");
+            res.redirect("/home");
           }
         });
       }
@@ -162,7 +189,8 @@ app.get("/posts/:postId",function(req, res){
             if(post._id==requestedPostID) {
               res.render("post",{
                 postTitle:post.title,
-                content:post.content
+                content:post.content,
+                logStatus:`${req.user? 'in':'out'}`
               });
             }
           });
