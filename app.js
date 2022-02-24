@@ -21,7 +21,7 @@ app.use(express.static("public"));
 
 
 app.use(session({
-  secret: process.env.SECRET,
+  secret: "SecretWillBeSecret.",
   resave: false,
   saveUninitialized: true,
   // cookie: { secure: true }
@@ -30,13 +30,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// mongoose.connect("mongodb+srv://admin-anandb0101:QW5hbmRi@cluster0.1ylq2.mongodb.net/blogDB?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect("mongodb://localhost:27017/blogDB",{ useNewUrlParser: true,  useUnifiedTopology: true  });
+mongoose.connect("mongodb+srv://admin-anandb0101:QW5hbmRi@cluster0.1ylq2.mongodb.net/blogDB?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect("mongodb://localhost:27017/blogDB",{ useNewUrlParser: true,  useUnifiedTopology: true  });
 
-// const postSchema = mongoose.Schema({
-//   title:String,
-//   content:String
-// });
 
 const userSchema = mongoose.Schema({
   username:String,
@@ -49,26 +45,12 @@ const userSchema = mongoose.Schema({
 
 userSchema.plugin(passportLocalMongoose);
 
-// const Post = mongoose.model("Post", postSchema);
 const User = mongoose.model("User", userSchema);
 
 passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-// passport.serializeUser(function(user, cb) {
-//   process.nextTick(function() {
-//     cb(null, { id: user.id, username: user.username, name: user.displayName });
-//   });
-// });
-
-// passport.deserializeUser(function(user, cb) {
-//   process.nextTick(function() {
-//     return cb(null, user);
-//   });
-// });
-
 
 app.get("/", function(req, res) {
   if(req.isAuthenticated()) {
