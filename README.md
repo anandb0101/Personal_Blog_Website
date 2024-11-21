@@ -1,7 +1,7 @@
-# Daily Journal
-Daily Journal is one of the projects done as part of the Web Development learning. 
+# Personal Blog Website
+It is one of the projects that was done as part of the Web Development learning. 
 
-This website facilitates to publish daily blog post and keeps them sequentially. 
+This website facilitates the publishing of daily blog posts and keeps them sequentially. 
 
 # Tools used
 Node.js, EJS, Express.js, Mongoose 
